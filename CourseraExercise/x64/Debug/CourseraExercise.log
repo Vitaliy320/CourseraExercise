@@ -1,5 +1,2 @@
-﻿  Game.cpp
-  Solver.cpp
-D:\Programming\C++\Projects\Test\CourseraExercise\CourseraExercise\Solver.cpp(41,12): warning C4101: 'test': unreferenced local variable
-  Generating Code...
+﻿  Solver.cpp
   CourseraExercise.vcxproj -> D:\Programming\C++\Projects\Test\CourseraExercise\x64\Debug\CourseraExercise.exe

@@ -27,3 +27,4 @@ Cube &Stack::popBack() {
 	cubes_.pop_back();
 	return topCube;
 }
+

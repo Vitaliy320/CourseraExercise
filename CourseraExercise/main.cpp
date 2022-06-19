@@ -162,7 +162,7 @@ int main() {
 	//cout << newtons_method() << "\n" << "hello there";
 
 	//week3Challenge();
-	Game game = Game(3, 0, 2, 4);
+	Game game = Game(3, 0, 2, 2);
 	game.initialiseCubes();
 
 	return 0;

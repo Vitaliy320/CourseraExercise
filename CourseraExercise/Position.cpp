@@ -1,12 +1,15 @@
 #include "Position.h"
 
-Position::Position() {}
+Position::Position() {
+	parentPointer_ = nullptr;
+	isFinal = false;
+}
 
 Position::Position(std::vector<Stack>& position) {
 	position_ = position;
 	parentPointer_ = nullptr;
 	//childPointers_ = std::vector<Position*>;
-	is_final = false;
+	isFinal = false;
 }
 
 void Position::setPosition(std::vector<Stack> position) {

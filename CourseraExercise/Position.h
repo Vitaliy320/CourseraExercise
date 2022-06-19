@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Stack.h"
+#include <iostream>
 
 class Position {
 public:
@@ -15,7 +16,9 @@ public:
 	std::vector<Position*> getChildPointers();
 	void setParentPointer(Position* parent);
 	void setChildPointers(Position* child);
-	bool is_final;
+	bool isFinal;
+	std::vector<Position> knownPositions;
+	int index;
 
 private:
 	Position* parentPointer_;

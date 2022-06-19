@@ -26,8 +26,10 @@ void Game::initialiseCubes() {
 	}
 
 	Position startingPosition = Position(stacks);
+	startingPosition.knownPositions.push_back(startingPosition);
 	Position* positionsTree = &startingPosition;
-	Solver solver = Solver(numberOfStacks, startingStackIndex, targetStackIndex, startingPosition);
+	Solver solver = Solver(numberOfStacks, startingStackIndex, targetStackIndex, numberOfCubes, startingPosition);
 	//solver.positionsTree = &startingPosition;
-	positionsTree = solver.getPossiblePositions(positionsTree);
+	positionsTree = solver.getTree();
+		//solver.getPossiblePositions(positionsTree);
 }

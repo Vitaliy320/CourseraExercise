@@ -2,18 +2,26 @@
 #include "Stack.h"
 #include "Cube.h"
 #include "Position.h"
+#include <string>
 
 class Solver {
 public:
 	Position* positionsTree;
-	int numberOfStacks, startingStackIndex, targetStackIndex;
+	int numberOfStacks, startingStackIndex, targetStackIndex, numberOfCubes;
 	Position startingPosition, currentPosition;
 	
-	Solver(int numberOfStacks, int startingStackIndex, int targetStackIndex, Position &position);
+	Solver(int numberOfStacks, int startingStackIndex, int targetStackIndex, int numberOfCubes, Position &position);
 
-	Position* getPossiblePositions(Position* currentPosition);
+	Position* getTree();
+	Position* getPossiblePositions(Position* currentPosition, int* index);
+	Stack getStackByIndexValue(std::vector<Stack> stacks, int index);
+
+	bool positionInVectorOfPositions(std::vector<Position> knownPositions, Position position);
+	bool equalPositions(Position position1, Position position2);
 
 private:
 	std::vector<Stack> getRemainingStacks(std::vector<Stack> stacksToFilter, Stack stackToExclude);
-	bool compareVectors_(std::vector<Cube> vector1, std::vector<Cube> vector2);
+	bool compareVectorsOfCubes_(std::vector<Cube> vector1, std::vector<Cube> vector2);
+	bool stackInVectorOfStacks_(std::vector<Stack> knownStacks, Stack positionStack);
+	void printInfo(Position position, Position currentPosition, int index);
 };

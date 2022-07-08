@@ -7,7 +7,7 @@
 class Solver {
 public:
 	Position* positionsTree;
-	int numberOfStacks, startingStackIndex, targetStackIndex, numberOfCubes;
+	int numberOfStacks, startingStackIndex, targetStackIndex, numberOfCubes, minBranchLength;
 	Position startingPosition, currentPosition;
 	
 	Solver(int numberOfStacks, int startingStackIndex, int targetStackIndex, int numberOfCubes, Position &position);
@@ -18,6 +18,10 @@ public:
 
 	bool positionInVectorOfPositions(std::vector<Position> knownPositions, Position position);
 	bool equalPositions(Position position1, Position position2);
+
+	int getBranchLength(Position* position);
+
+	void removeBranchUpToRoot(Position* position);
 
 private:
 	std::vector<Stack> getRemainingStacks(std::vector<Stack> stacksToFilter, Stack stackToExclude);

@@ -8,6 +8,7 @@ Solver::Solver(int numberOfStacks, int startingStackIndex, int targetStackIndex,
 	this->startingPosition = position;
 	this->numberOfCubes = numberOfCubes;
 	this->currentPosition = position;
+	this->minBranchLength = 0;
 }
 
 bool Solver::compareVectorsOfCubes_(std::vector<Cube> vector1, std::vector<Cube> vector2) {
@@ -100,15 +101,34 @@ void Solver::printInfo(Position position, Position currentPosition, int index) {
 	std::cout << "\n\n";
 }
 
-Position* Solver::getPossiblePositions(Position* currentPosition, int* index) {
-	if (*index > 0) {
-		if (currentPosition->getParentPointer()->index == 3 && currentPosition->index > 4) {
-			int v = 1;
-		}
+int Solver::getBranchLength(Position* position) {
+	int counter = 0;
+	while (position->getParentPointer() != NULL) {
+		position = position->getParentPointer();
+		counter++;
 	}
+
+	return counter;
+}
+
+void Solver::removeBranchUpToRoot(Position* position) {
+		while (Position * toDelete = position) {
+			if (position->getParentPointer() == NULL) {
+				break;
+			}
+			position = position->getParentPointer();
+			delete toDelete;
+		}
+}
+
+Position* Solver::getPossiblePositions(Position* currentPosition, int* index) {
 
 	if (getStackByIndexValue(currentPosition->getPosition(), targetStackIndex).getCubes().size() == numberOfCubes) {
 		currentPosition->isFinal = true;
+		int currentPositionLength = getBranchLength(currentPosition);
+		if (minBranchLength == 0 || currentPositionLength < minBranchLength) {
+			minBranchLength = currentPositionLength;
+		}
 		return currentPosition;
 	}
 
@@ -123,25 +143,19 @@ Position* Solver::getPossiblePositions(Position* currentPosition, int* index) {
 			for (Stack possibleStack : possibleStacks) {
 				initialStack = stack;
 				if (possibleStack.getCubes().size() == 0 || possibleStack.getCubes().back().size > initialStack.getCubes().back().size) {
-					
+
 					currentCube = initialStack.popBack();
 					possibleStack.pushBack(currentCube);
 					remainingStack = getRemainingStacks(possibleStacks, possibleStack).back();
 					std::vector<Stack> currentStacks = { initialStack, possibleStack, remainingStack };
-					
-					position = new Position(currentStacks);
 
-					if (*index > 1) {
-						if (currentPosition->getParentPointer()->index == 3 && currentPosition->index > 4) {
-							int v = 1;
-						}
-					}
+					position = new Position(currentStacks);
 
 					*index = *index + 1;
 					position->index = *index;
-					printInfo(*position, *currentPosition, *index);
 
 					if (positionInVectorOfPositions(currentPosition->knownPositions, *position)) {
+						//removeBranchUpToRoot(position);
 						break;
 					}
 
@@ -149,14 +163,26 @@ Position* Solver::getPossiblePositions(Position* currentPosition, int* index) {
 					currentPosition->setChildPointers(position);
 					position->knownPositions = currentPosition->knownPositions;
 					position->knownPositions.push_back(*position);
-				}
-			}
 
-			for (Position* position : currentPosition->getChildPointers()) {
-				currentPosition = this->getPossiblePositions(position, index);
+					if (position->index == 83) {
+						int v = 0;
+					}
+
+					if (getBranchLength(position) > minBranchLength && minBranchLength > 0 && position->isFinal == false) {
+						//removeBranchUpToRoot(position);
+						break;
+					}
+
+					printInfo(*position, *currentPosition, *index);
+				}
 			}
 		}
 	}
+
+	for (Position* position : currentPosition->getChildPointers()) {
+			currentPosition = this->getPossiblePositions(position, index);
+	}
+	
 	return currentPosition;
 }
 

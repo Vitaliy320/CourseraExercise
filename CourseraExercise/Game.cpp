@@ -31,5 +31,6 @@ void Game::initialiseCubes() {
 	Solver solver = Solver(numberOfStacks, startingStackIndex, targetStackIndex, numberOfCubes, startingPosition);
 	//solver.positionsTree = &startingPosition;
 	positionsTree = solver.getTree();
+	std::cout << "The best solution is " << std::to_string(solver.minBranchLength) << " permutations." << "\n\n";
 		//solver.getPossiblePositions(positionsTree);
 }

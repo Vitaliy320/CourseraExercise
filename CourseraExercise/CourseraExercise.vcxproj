@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="KnownPosition.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NamespaceTest.cpp" />
     <ClCompile Include="Position.cpp" />
@@ -150,6 +151,7 @@
   <ItemGroup>
     <ClInclude Include="Cube.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="KnownPosition.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="Solver.h" />
     <ClInclude Include="Stack.h" />

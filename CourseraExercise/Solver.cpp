@@ -61,10 +61,24 @@ bool Solver::equalPositions(Position position1, Position position2) {
 	return equalStacks == numberOfStacks;
 }
 
-bool Solver::positionInVectorOfPositions(std::vector<Position> knownPositions, Position position) {
-	//std::vector<Stack> positionStacks = position.getPosition();
-	for (Position knownPosition : knownPositions) {
-		if (equalPositions(knownPosition, position)) {
+bool Solver::currentPositionHasLongerBranchLength(Position* position, KnownPosition* knownPosition) {
+	int currentBranchLength = getBranchLength(position);
+
+	if (position->getParentPointer() == NULL || currentBranchLength > knownPosition->getBranchLength()) {
+		return true;
+	}
+
+	knownPosition->setBranchLength(currentBranchLength);
+	return false;
+}
+
+bool Solver::positionInVectorOfPositions(Position * position) {	
+	Stack stack0 = getStackByIndexValue(position->getPosition(), 0);
+	Stack stack2 = getStackByIndexValue(position->getPosition(), 2);
+
+	for (KnownPosition knownPosition : knownPositions) {
+		if (equalPositions(*knownPosition.getPosition(), *position) &&
+			currentPositionHasLongerBranchLength(position, &knownPosition)) {
 			return true;
 		}
 	}
@@ -83,13 +97,16 @@ Stack Solver::getStackByIndexValue(std::vector<Stack> stacks, int index) {
 	return Stack();
 }
 
-void Solver::printInfo(Position position, Position currentPosition, int index) {
+void Solver::printInfo_(Position currentPosition) {
 	std::string stackCubes;
-	std::cout << "Position: " << std::to_string(index) << "\n";
-	std::cout << "Parent position: " << std::to_string(currentPosition.index) << "\n";
+	std::cout << "Position: " << std::to_string(currentPosition.index) << "\n";
+
+	if (currentPosition.getParentPointer() != NULL) {
+		std::cout << "Parent position: " << std::to_string(currentPosition.getParentPointer()->index) << "\n";
+	}
 
 	for (int i = 0; i < numberOfStacks; i++) {
-		Stack stack = getStackByIndexValue(position.getPosition(), i);
+		Stack stack = getStackByIndexValue(currentPosition.getPosition(), i);
 		std::cout << "Stack " << std::to_string(i) << " cubes:\n";
 
 		stackCubes = "";
@@ -121,7 +138,15 @@ void Solver::removeBranchUpToRoot(Position* position) {
 		}
 }
 
+void Solver::printBranch(Position* position) {
+	while (Position* currentPosition = position) {
+		printInfo_(*currentPosition);
+		position = position->getParentPointer();
+	}
+}
+
 Position* Solver::getPossiblePositions(Position* currentPosition, int* index) {
+	printInfo_(*currentPosition);
 
 	if (getStackByIndexValue(currentPosition->getPosition(), targetStackIndex).getCubes().size() == numberOfCubes) {
 		currentPosition->isFinal = true;
@@ -129,6 +154,7 @@ Position* Solver::getPossiblePositions(Position* currentPosition, int* index) {
 		if (minBranchLength == 0 || currentPositionLength < minBranchLength) {
 			minBranchLength = currentPositionLength;
 		}
+		finalPositions.push_back(currentPosition);
 		return currentPosition;
 	}
 
@@ -154,33 +180,23 @@ Position* Solver::getPossiblePositions(Position* currentPosition, int* index) {
 					*index = *index + 1;
 					position->index = *index;
 
-					if (positionInVectorOfPositions(currentPosition->knownPositions, *position)) {
-						//removeBranchUpToRoot(position);
-						break;
-					}
-
 					position->setParentPointer(currentPosition);
-					currentPosition->setChildPointers(position);
-					position->knownPositions = currentPosition->knownPositions;
-					position->knownPositions.push_back(*position);
-
-					if (position->index == 83) {
-						int v = 0;
-					}
-
-					if (getBranchLength(position) > minBranchLength && minBranchLength > 0 && position->isFinal == false) {
-						//removeBranchUpToRoot(position);
+					
+					if (positionInVectorOfPositions(position) || (getBranchLength(position) > minBranchLength && minBranchLength > 0 && position->isFinal == false)) {
+						delete position;
 						break;
 					}
 
-					printInfo(*position, *currentPosition, *index);
+					currentPosition->setChildPointers(position);
+
+					knownPositions.push_back(KnownPosition(position, getBranchLength(position)));
 				}
 			}
 		}
 	}
 
 	for (Position* position : currentPosition->getChildPointers()) {
-			currentPosition = this->getPossiblePositions(position, index);
+		currentPosition = this->getPossiblePositions(position, index);
 	}
 	
 	return currentPosition;

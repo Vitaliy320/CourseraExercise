@@ -17,7 +17,6 @@ public:
 	void setParentPointer(Position* parent);
 	void setChildPointers(Position* child);
 	bool isFinal;
-	std::vector<Position> knownPositions;
 	int index;
 
 private:

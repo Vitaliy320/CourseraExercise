@@ -40,12 +40,12 @@ void testReference() {
 void testArray() {
 	const int size = 3;
 	int* x = new int[size];
-	int* x_array[size];
+	// int* x_array[size];
 	int x_values[size];
 
-	for (int i = 0; i < size; i++) {
-		x_array[i] = x + i;
-	}
+	// for (int i = 0; i < size; i++) {
+	// 	x_array[i] = x + i;
+	// }
 
 	for (int i = 0; i < size; i++) {
 		x[i] = i + 10;
@@ -67,23 +67,23 @@ void testDestructor() {
 
 class A {};
 
-class B {
-public:
-	// conversion from A (constructor):
-	B(const A& x) {}
-	// conversion from A (assignment):
-	B& operator= (const A& x) { return *this; }
-	// conversion to A (type-cast operator)
-	operator A() { return A(); }
-};
+// class B {
+// public:
+// 	// conversion from A (constructor):
+// 	B(const A& x) {}
+// 	// conversion from A (assignment):
+// 	B& operator= (const A& x) { return *this; }
+// 	// conversion to A (type-cast operator)
+// 	operator A() { return A(); }
+// };
 
-void complex_casting_example()
-{
-	A foo;
-	B bar = foo;    // calls constructor
-	bar = foo;      // calls assignment
-	foo = bar;      // calls type-cast operator
-}
+// void complex_casting_example()
+// {
+// 	A foo;
+// 	B bar = foo;    // calls constructor
+// 	bar = foo;      // calls assignment
+// 	foo = bar;      // calls type-cast operator
+// }
 
 //
 //string randomColour() {
@@ -96,10 +96,10 @@ void complex_casting_example()
 //	//string colour = (string)colours[distr(eng)]
 //}
 
-int* allocate_an_integer() {
-	int i = 0;
-	return &i;
-}
+// int* allocate_an_integer() {
+// 	int i = 0;
+// 	return &i;
+// }
 
 double newtons_method() {
 	double x = 200;
@@ -162,7 +162,7 @@ int main() {
 	//cout << newtons_method() << "\n" << "hello there";
 
 	//week3Challenge();
-	Game game = Game(3, 0, 2, 4);
+	Game game = Game(4, 0, 2, 4);
 	game.initialiseCubes();
 
 	return 0;

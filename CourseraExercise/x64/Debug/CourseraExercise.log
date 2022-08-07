@@ -1,4 +1,3 @@
-﻿  Game.cpp
-  Solver.cpp
-  Generating Code...
+﻿  Solver.cpp
+D:\Programming\C++\Projects\Test\CourseraExercise\CourseraExercise\Solver.cpp(289): warning C4715: 'Solver::getSolutionsWidth': not all control paths return a value
   CourseraExercise.vcxproj -> D:\Programming\C++\Projects\Test\CourseraExercise\x64\Debug\CourseraExercise.exe

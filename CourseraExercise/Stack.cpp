@@ -10,7 +10,7 @@ Stack::Stack(int i) {
 
 void Stack::pushBack(Cube& cube) {
 	//cube.size = 0;
-	cubes_.push_back(cube);
+	_cubes.push_back(cube);
 }
 
 void Stack::pushBackPointer(Cube* cube) {
@@ -19,12 +19,12 @@ void Stack::pushBackPointer(Cube* cube) {
 }
 
 std::vector<Cube> Stack::getCubes() {
-	return cubes_;
+	return _cubes;
 }
 
 Cube &Stack::popBack() {
-	Cube topCube = cubes_.back();
-	cubes_.pop_back();
+	Cube &topCube = _cubes.back();
+	_cubes.pop_back();
 	return topCube;
 }
 

@@ -1,39 +1,39 @@
 #include "Position.h"
 
 Position::Position() {
-	parentPointer_ = nullptr;
+	_parentPointer = nullptr;
 	isFinal = false;
 }
 
 Position::Position(std::vector<Stack>& position) {
-	position_ = position;
-	parentPointer_ = nullptr;
+	_positionStacks = position;
+	_parentPointer = nullptr;
 	//childPointers_ = std::vector<Position*>;
 	isFinal = false;
 }
 
 void Position::setPosition(std::vector<Stack> position) {
-	position_ = position;
+	_positionStacks = position;
 }
 
-std::vector<Stack> Position::getPosition() {
-	return position_;
+std::vector<Stack> Position::getPositionStacks() {
+	return _positionStacks;
 }
 
 Position* Position::getParentPointer() {
-	return parentPointer_;
+	return _parentPointer;
 }
 
 std::vector<Position*> Position::getChildPointers() {
-	return childPointers_;
+	return _childPointers;
 }
 
 void Position::setParentPointer(Position* parent) {
-	parentPointer_ = parent;
+	_parentPointer = parent;
 }
 
 void Position::setChildPointers(Position* child) {
-	childPointers_.push_back(child);
+	_childPointers.push_back(child);
 }
 
 void Position::addNode(Position* position) {

@@ -21,5 +21,5 @@ public:
 	std::vector<Cube> getCubes();
 
 private:
-	std::vector<Cube> cubes_;
+	std::vector<Cube> _cubes;
 };

@@ -14,7 +14,9 @@ public:
 	Solver(int numberOfStacks, int startingStackIndex, int targetStackIndex, int numberOfCubes, Position &position);
 
 	Position* getTree();
-	Position* getPossiblePositions(Position* currentPosition, int* index);
+	Position* getSolutionsDepth(Position* currentPosition, int* index);
+	Position* getSolutionsWidth(std::vector<Position*> currentLayer, int* index);
+
 	Stack getStackByIndexValue(std::vector<Stack> stacks, int index);
 
 	bool positionInVectorOfPositions(Position * position);
@@ -32,9 +34,11 @@ public:
 
 	std::vector<Position*> finalPositions;
 
+	Position* createPositionFromInitialStack(Stack stack, Position* currentPosition);
+
 private:
 	std::vector<Stack> getRemainingStacks(std::vector<Stack> stacksToFilter, Stack stackToExclude);
-	bool compareVectorsOfCubes_(std::vector<Cube> vector1, std::vector<Cube> vector2);
-	bool stackInVectorOfStacks_(std::vector<Stack> knownStacks, Stack positionStack);
-	void printInfo_(Position currentPosition);
+	bool _compareVectorsOfCubes(std::vector<Cube> vector1, std::vector<Cube> vector2);
+	bool _stackInVectorOfStacks(std::vector<Stack> knownStacks, Stack positionStack);
+	void _printInfo(Position currentPosition);
 };

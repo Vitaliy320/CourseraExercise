@@ -11,7 +11,7 @@ public:
 	void getParentNode();
 	void addNode(Position* position);
 	void setPosition(std::vector<Stack> position);
-	std::vector<Stack> getPosition();
+	std::vector<Stack> getPositionStacks();
 	Position* getParentPointer();
 	std::vector<Position*> getChildPointers();
 	void setParentPointer(Position* parent);
@@ -20,7 +20,7 @@ public:
 	int index;
 
 private:
-	Position* parentPointer_;
-	std::vector<Position*> childPointers_;
-	std::vector<Stack> position_;
+	Position* _parentPointer;
+	std::vector<Position*> _childPointers;
+	std::vector<Stack> _positionStacks;
 };

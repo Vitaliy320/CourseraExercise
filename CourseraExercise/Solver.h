@@ -15,7 +15,7 @@ public:
 
 	Position* getTree();
 	Position* getSolutionsDepth(Position* currentPosition, int* index);
-	Position* getSolutionsWidth(std::vector<Position*> currentLayer, int* index);
+	Position* getSolutionsBreadth(std::vector<Position*> currentLayer, int* index);
 
 	Stack getStackByIndexValue(std::vector<Stack> stacks, int index);
 
@@ -41,4 +41,6 @@ private:
 	bool _compareVectorsOfCubes(std::vector<Cube> vector1, std::vector<Cube> vector2);
 	bool _stackInVectorOfStacks(std::vector<Stack> knownStacks, Stack positionStack);
 	void _printInfo(Position currentPosition);
+	Position* _getRootPosition(Position* position);
+	void _bfs(std::vector<Position*> positionsLayer);
 };

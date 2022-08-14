@@ -129,13 +129,13 @@ int Solver::getBranchLength(Position* position) {
 }
 
 void Solver::removeBranchUpToRoot(Position* position) {
-		while (Position * toDelete = position) {
-			if (position->getParentPointer() == NULL) {
-				break;
-			}
-			position = position->getParentPointer();
-			delete toDelete;
+	while (Position * toDelete = position) {
+		if (position->getParentPointer() == NULL) {
+			break;
 		}
+		position = position->getParentPointer();
+		delete toDelete;
+	}
 }
 
 void Solver::printBranch(Position* position) {
@@ -150,10 +150,6 @@ Position* Solver::createPositionFromInitialStack(Stack stack, Position* currentP
 	Stack initialStack, remainingStack;
 	Cube currentCube;
 	Position* newPosition = NULL;
-
-	if (initialStack.getCubes().size() == 0) {
-		int v = 1;
-	}
 
 	if (stack.getCubes().size() > 0) {
 		possibleStacks = getRemainingStacks(currentPosition->getPositionStacks(), stack);
@@ -174,8 +170,39 @@ Position* Solver::createPositionFromInitialStack(Stack stack, Position* currentP
 	return newPosition;
 }
 
+Position* Solver::_getRootPosition(Position* position) {
+	Position* parentPosition = position->getParentPointer();
+
+	while (parentPosition->getParentPointer() != NULL) {
+		parentPosition = parentPosition->getParentPointer();
+	}
+
+	return parentPosition;
+}
+
+void Solver::_bfs(std::vector<Position*> positionsLayer) {
+	std::vector<Position*> currentLayer;
+
+	for (Position* currentPosition : positionsLayer) {
+		for (Position* childPosition : currentPosition->getChildPointers()) {
+			if (childPosition->isFinal) {
+				std::cout << std::to_string(childPosition->index);
+				return;
+			}
+
+			currentLayer.push_back(childPosition);
+		}
+	}
+
+	if (currentLayer.size() > 0) {
+		_bfs(currentLayer);
+	}
+
+	return;
+}
+
 Position* Solver::getSolutionsDepth(Position* currentPosition, int* index) {
-	_printInfo(*currentPosition);
+	//_printInfo(*currentPosition);
 
 	if (getStackByIndexValue(currentPosition->getPositionStacks(), targetStackIndex).getCubes().size() == numberOfCubes) {
 		currentPosition->isFinal = true;
@@ -232,7 +259,7 @@ Position* Solver::getSolutionsDepth(Position* currentPosition, int* index) {
 }
 
 
-Position* Solver::getSolutionsWidth(std::vector<Position*> currentLayer, int* index) {
+Position* Solver::getSolutionsBreadth(std::vector<Position*> currentLayer, int* index) {
 	std::vector<Position*> newLayer;
 	std::vector<Stack> possibleStacks, remainingStacks;
 	Stack initialStack, remainingStack;
@@ -240,7 +267,7 @@ Position* Solver::getSolutionsWidth(std::vector<Position*> currentLayer, int* in
 	Position* newPosition;
 
 	for (Position* currentPosition : currentLayer) {
-		_printInfo(*currentPosition);
+		//_printInfo(*currentPosition);
 		if (getStackByIndexValue(currentPosition->getPositionStacks(), targetStackIndex).getCubes().size() == numberOfCubes) {
 			currentPosition->isFinal = true;
 			int currentPositionLength = getBranchLength(currentPosition);
@@ -248,6 +275,8 @@ Position* Solver::getSolutionsWidth(std::vector<Position*> currentLayer, int* in
 				minBranchLength = currentPositionLength;
 			}
 			finalPositions.push_back(currentPosition);
+
+			Position* rootPosition = _getRootPosition(currentPosition);
 			return currentPosition;
 		}
 
@@ -285,18 +314,21 @@ Position* Solver::getSolutionsWidth(std::vector<Position*> currentLayer, int* in
 		}
 	}
 
-	getSolutionsWidth(newLayer, index);
+	return getSolutionsBreadth(newLayer, index);
+
 }
 
 
 Position* Solver::getTree() {
-	Position* positionsTree = &startingPosition;
+	Position* positionsTree = &startingPosition, *finalPosition, *rootPosition;
 	std::vector<Position*> startingLayer = { &startingPosition };
 
 	startingPosition.index = 0;
 	int* index = new int(0);
 	*index = 0;
-	//Position* currPosition = getSolutionsDepth(&startingPosition, index);
-	Position* currPosition = getSolutionsWidth(startingLayer, index);
-	return currPosition;
+	//finalPosition = getSolutionsDepth(&startingPosition, index);
+	finalPosition = getSolutionsBreadth(startingLayer, index);
+	rootPosition = _getRootPosition(finalPosition);
+	_bfs(startingLayer);
+	return finalPosition;
 }
